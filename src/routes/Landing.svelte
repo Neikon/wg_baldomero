@@ -17,7 +17,7 @@
 </script>
 <div class="container">
   <div class="card" style="text-align:center">
-    <h1>🎉 Fiesta P2P</h1>
+    <h1>🔔 El portero Baldomero</h1>
     <p class="muted">Crea una sala, comparte el enlace y juega sin servidor</p>
     <div style="margin:1.5rem 0;display:grid;gap:0.8rem;max-width:360px;margin-left:auto;margin-right:auto">
       <input value={name} on:input={onInput} placeholder="Tu nombre" maxlength="20" />
