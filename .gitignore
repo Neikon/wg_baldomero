@@ -32,3 +32,6 @@ test-results
 
 # Documents
 *.pdf
+
+# Local git worktrees (SDD implementation workspaces)
+.worktrees/
