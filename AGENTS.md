@@ -55,6 +55,7 @@ npm run test:e2e  # Playwright; E2E_P2P=1 makes the tracker case mandatory
 
 1. Review the local diff and `git log` before changing anything.
 2. Re-run `check/test/build/test:e2e` if code changed.
+3. Commit and push to `main` as you complete each change — don't accumulate uncommitted work.
 3. Next: Baldomero game complete (plan: `docs/superpowers/plans/2026-09-20-baldomero-implementation.md`); new games per `docs/NUEVO-JUEGO.md`.
 
 <mcp_instructions>

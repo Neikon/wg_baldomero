@@ -1,17 +1,12 @@
 <script lang="ts">
-  import qrcode from 'qrcode-generator'
+  import { qrParaSala } from '../lib/utils/qr'
   export let salaId: string
   let copied=false
   let showQR=false
   $: link = typeof location !== 'undefined'
     ? `${location.origin}${import.meta.env.BASE_URL}#/sala/${salaId}`
     : ''
-  $: qrUrl = (()=>{ try {
-    const qr = qrcode(0, 'M')
-    qr.addData(link)
-    qr.make()
-    return qr.createDataURL(8, 0)
-  } catch { return '' } })()
+  $: qrUrl = qrParaSala(link)
   async function copy(){
     try{ await navigator.clipboard.writeText(link); copied=true; setTimeout(()=>copied=false,1500)}catch{ prompt('Copia el enlace:', link)}
   }
