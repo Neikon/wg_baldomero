@@ -124,3 +124,60 @@ describe('baldomero votacion', () => {
     expect(t.intentos).toBe(2)
   })
 })
+describe('baldomero adivinanza y final', () => {
+  function enAdivinanza(n = 4): { s: BaldomeroState; ids: string[] } {
+    const ids = Array.from({ length: n }, (_, i) => (i === 0 ? 'h1' : 'p' + (i + 1)))
+    let s = reducer(createInitialState(ids.map(id => ({ id }))), { t:'startGame' }, ctxHost)
+    for (const pid of ids) s = reducer(s, { t:'darPista', palabra:'w' }, { isHost: pid==='h1', peerId: pid })
+    for (const pid of ids) s = reducer(s, { t:'votar', objetivo: pid === s.baldomeroId ? ids.find(id => id !== s.baldomeroId)! : s.baldomeroId }, { isHost: pid==='h1', peerId: pid })
+    return { s, ids }
+  }
+  it('solo Baldomero puede adivinar y la celda debe ser válida', () => {
+    const { s } = enAdivinanza()
+    expect(reducer(s, { t:'adivinar', celda: s.chisme }, { isHost:false, peerId: s.jugadores.find(id => id !== s.baldomeroId)! })).toBe(s)
+    expect(reducer(s, { t:'adivinar', celda: 99 }, { isHost: s.baldomeroId==='h1', peerId: s.baldomeroId })).toBe(s)
+  })
+  it('acierto = gana Baldomero; fallo con intentos agotados = ganan vecinos y puntúan', () => {
+    const { s } = enAdivinanza()
+    const bctx = { isHost: s.baldomeroId==='h1', peerId: s.baldomeroId }
+    const win = reducer(s, { t:'adivinar', celda: s.chisme }, bctx)
+    expect(win.phase).toBe('final')
+    expect(win.ganador).toBe('baldomero')
+    const mal = (s.chisme + 1) % 16
+    const lose = reducer(s, { t:'adivinar', celda: mal }, bctx)
+    expect(lose.phase).toBe('final')
+    expect(lose.ganador).toBe('vecinos')
+    for (const id of s.jugadores) {
+      expect(lose.marcador[id]).toBe(id === s.baldomeroId ? 0 : 1)
+    }
+  })
+  it('nuevaRonda cambia chisme y reiniciar vuelve al lobby', () => {
+    const { s } = enAdivinanza()
+    const bctx = { isHost: s.baldomeroId==='h1', peerId: s.baldomeroId }
+    const fin = reducer(s, { t:'adivinar', celda: s.chisme }, bctx)
+    const r2 = reducer(fin, { t:'nuevaRonda' }, ctxHost)
+    expect(r2.phase).toBe('pistas')
+    expect(r2.ronda).toBe(2)
+    expect(r2.chisme).not.toBe(s.chisme)
+    expect(r2.pistas).toEqual({})
+    const lob = reducer(r2, { t:'reiniciar' }, ctxHost)
+    expect(lob.phase).toBe('lobby')
+    expect(lob.marcador).toEqual(fin.marcador)
+  })
+  it('ronda completa de 4 jugadores de principio a fin', () => {
+    let s = reducer(createInitialState(peers4), { t:'startGame' }, ctxHost)
+    expect(s.phase).toBe('pistas')
+    for (const pid of peers4.map(p => p.id)) {
+      s = reducer(s, { t:'darPista', palabra: 'pista-' + pid }, { isHost: pid==='h1', peerId: pid })
+    }
+    expect(s.phase).toBe('votacion')
+    for (const pid of peers4.map(p => p.id)) {
+      const objetivo = pid === s.baldomeroId ? peers4.map(p => p.id).find(id => id !== s.baldomeroId)! : s.baldomeroId
+      s = reducer(s, { t:'votar', objetivo }, { isHost: pid==='h1', peerId: pid })
+    }
+    expect(s.phase).toBe('adivinanza')
+    s = reducer(s, { t:'adivinar', celda: (s.chisme + 3) % 16 }, { isHost: s.baldomeroId==='h1', peerId: s.baldomeroId })
+    expect(s.phase).toBe('final')
+    expect(s.ganador).toBe('vecinos')
+  })
+})

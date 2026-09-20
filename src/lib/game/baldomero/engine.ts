@@ -99,5 +99,40 @@ export function reducer(state: BaldomeroState, action: BaldomeroAction, ctx: { i
       version: next.version + 1
     }
   }
+  if (action.t === 'adivinar') {
+    if (state.phase !== 'adivinanza') return state
+    if (ctx.peerId !== state.baldomeroId) return state
+    const celda = action.celda
+    if (!Number.isInteger(celda) || celda < 0 || celda > 15) return state
+    if (celda === state.chisme) {
+      const marcador = { ...state.marcador }
+      marcador[state.baldomeroId] = (marcador[state.baldomeroId] ?? 0) + 1
+      return { ...state, phase: 'final', adivinanza: celda, ganador: 'baldomero', marcador, version: state.version + 1 }
+    }
+    const intentos = state.intentos - 1
+    if (intentos > 0) {
+      return { ...state, adivinanza: celda, intentos, version: state.version + 1 }
+    }
+    const marcador = { ...state.marcador }
+    for (const id of state.jugadores) {
+      if (id !== state.baldomeroId) marcador[id] = (marcador[id] ?? 0) + 1
+    }
+    return { ...state, phase: 'final', adivinanza: celda, intentos: 0, ganador: 'vecinos', marcador, version: state.version + 1 }
+  }
+  if (action.t === 'nuevaRonda') {
+    if (!ctx.isHost) return state
+    if (state.phase !== 'final') return state
+    return empezarRonda(state, state.tarjeta)
+  }
+  if (action.t === 'reiniciar') {
+    if (!ctx.isHost) return state
+    if (state.phase === 'lobby') return state
+    const fresh = createInitialState([])
+    return {
+      ...fresh, phase: 'lobby', version: state.version + 1,
+      tarjeta: state.tarjeta, marcador: state.marcador,
+      ultimaCelda: state.chisme, ronda: state.ronda
+    }
+  }
   return state
 }
