@@ -35,3 +35,6 @@ test-results
 
 # Local git worktrees (SDD implementation workspaces)
 .worktrees/
+
+# SDD plan workspaces (briefs, reports, review packages — scratch)
+.superpowers/
