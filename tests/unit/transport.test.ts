@@ -33,8 +33,8 @@ describe('transport', () => {
   })
 
   it('joinConfig conserva appId por sala', () => {
-    const c = buildJoinConfig('wg_template_v1_abc123')
-    expect(c.appId).toBe('wg_template_v1_abc123')
+    const c = buildJoinConfig('wg_baldomero_v1_abc123')
+    expect(c.appId).toBe('wg_baldomero_v1_abc123')
     expect(c.relayUrls).toEqual([...TRACKER_URLS])
     expect(c.relayRedundancy).toBe(Math.min(RELAY_REDUNDANCY, TRACKER_URLS.length))
     expect(c.rtcConfig.iceServers!.length).toBe(STUN_URLS.length)
@@ -45,7 +45,7 @@ describe('transport', () => {
     const rtc = buildRtcConfig(turn)
     expect(rtc.iceServers!.length).toBe(STUN_URLS.length + 1)
     expect(rtc.iceServers![STUN_URLS.length]).toEqual(turn[0])
-    const c = buildJoinConfig('wg_template_v1_abc123', turn)
+    const c = buildJoinConfig('wg_baldomero_v1_abc123', turn)
     expect(c.rtcConfig.iceServers).toContainEqual(turn[0])
   })
 })

@@ -1,10 +1,10 @@
 # Crear un juego nuevo
 
-Un juego de `wg_template` es un estado serializable, un reducer puro y un componente
+Un juego de `wg_baldomero` es un estado serializable, un reducer puro y un componente
 Svelte. La sala, el lobby y la red P2P no necesitan conocer sus reglas.
 
-El ejemplo de referencia es [`src/lib/game/trivia/`](../src/lib/game/trivia/):
-configuración de partida, temporizador y varias fases. Cópialo y simplifica.
+El ejemplo de referencia es [`src/lib/game/baldomero/`](../src/lib/game/baldomero/):
+pistas, votación, adivinanza y marcador por rondas. Cópialo y simplifica.
 
 ## 1. Crea estado, acciones y reducer
 
@@ -93,8 +93,8 @@ prop `onAction`:
 {/if}
 ```
 
-Sustituye la entrada de la demo en `src/lib/game/registry.ts` por la tuya (`id`,
-nombre, las dos funciones y el componente); borra `src/lib/game/trivia/` o
+Sustituye la entrada de Baldomero en `src/lib/game/registry.ts` por la tuya (`id`,
+nombre, las dos funciones y el componente); borra `src/lib/game/baldomero/` o
 consérvala fuera del registry como referencia. No cambies `Room.svelte`,
 `Game.svelte` ni `src/lib/net/`:
 
@@ -129,7 +129,7 @@ npm run test:e2e
 Para abrirlo directamente como anfitrión durante el desarrollo:
 
 ```text
-http://localhost:5173/wg_template/#/sala/prueba?host=1&name=Ana
+http://localhost:5173/wg_baldomero/#/sala/prueba?host=1&name=Ana
 ```
 
 La plantilla trae un solo juego registrado: al abrir la sala verás el tuyo.

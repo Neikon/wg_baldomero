@@ -29,3 +29,12 @@ test-results
 *.njsproj
 *.sln
 *.sw?
+
+# Documents
+*.pdf
+
+# Local git worktrees (SDD implementation workspaces)
+.worktrees/
+
+# SDD plan workspaces (briefs, reports, review packages — scratch)
+.superpowers/

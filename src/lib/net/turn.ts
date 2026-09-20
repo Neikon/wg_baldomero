@@ -14,8 +14,8 @@
  * funciona como antes (solo STUN).
  */
 
-export const TURN_API_KEY = 'wg_template:turnApi'
-export const TURN_CACHE_KEY = 'wg_template:turnServers'
+export const TURN_API_KEY = 'wg_baldomero:turnApi'
+export const TURN_CACHE_KEY = 'wg_baldomero:turnServers'
 const TURN_TIMEOUT_MS = 4000
 
 export interface TurnServer {
