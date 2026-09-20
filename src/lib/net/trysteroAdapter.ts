@@ -48,7 +48,7 @@ export function relayStatus(): RelayStatus[] {
 }
 
 export function joinTrystero(salaId: string, turnServers: RTCIceServer[] = []): TrysteroRoom {
-  const config = buildJoinConfig('wg_template_v1_' + salaId, turnServers) as any
+  const config = buildJoinConfig('wg_baldomero_v1_' + salaId, turnServers) as any
   // Trystero torrent strategy usa salaId como roomId
   const room: any = (trysteroJoin as any)(config, salaId)
   const [rawSend, rawGet] = room.makeAction('msg')

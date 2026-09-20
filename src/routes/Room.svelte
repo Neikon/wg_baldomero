@@ -18,7 +18,7 @@
   let salaId = ''
   let isHostParam = false
   let initialName = ''
-  // Plantilla de un solo juego: juegoId es siempre el registrado por defecto.
+  // Un solo juego: juegoId es siempre el registrado por defecto.
   // El campo juegoId se mantiene en el protocolo para robustez entre versiones.
   let juegoId = DEFAULT_GAME_ID
   let trystero: any = null
@@ -93,7 +93,7 @@
   let watch: any = null
   const HARD_RELOAD_MS = 30000
   const MAX_HARD_RELOADS = 2
-  const reloadKey = () => `wg_template:reloads:${salaId}`
+  const reloadKey = () => `wg_baldomero:reloads:${salaId}`
   const reloadsHechas = () => {
     try { return parseInt(sessionStorage.getItem(reloadKey()) || '0', 10) || 0 } catch { return MAX_HARD_RELOADS }
   }
@@ -162,7 +162,7 @@
     turnCount = readTurnServers().length
     if (debug) {
       let recargas = 0
-      try { recargas = parseInt(sessionStorage.getItem(`wg_template:reloads:${salaId}`) || '0', 10) || 0 } catch { /* sin storage */ }
+      try { recargas = parseInt(sessionStorage.getItem(`wg_baldomero:reloads:${salaId}`) || '0', 10) || 0 } catch { /* sin storage */ }
       debugLog.enable({ sala: salaId, rol: isHostParam ? 'host' : 'invitado', ua: uaCorta(), recargasDuras: String(recargas) })
       // Chequeo automático al entrar en debug: el log trae siempre el veredicto.
       void probarRed()
@@ -444,7 +444,7 @@
   }
 
   function descargarLog(){
-    const ok = downloadText(`wg_template-${salaId}.log`, debugLog.toText())
+    const ok = downloadText(`wg_baldomero-${salaId}.log`, debugLog.toText())
     showToast(ok ? 'Log descargado' : 'No se pudo descargar')
   }
 

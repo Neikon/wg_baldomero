@@ -1,6 +1,6 @@
-# wg_template — Plantilla Fiesta P2P
+# wg_baldomero — Juego de fiesta P2P
 
-Plantilla base para juegos de fiesta multijugador en navegador. **Sin servidor ni base de datos**, 100% estática en GitHub Pages (1–20 jugadores, turnos).
+Juego de fiesta multijugador en navegador. **Sin servidor ni base de datos**, 100% estático en GitHub Pages (1–20 jugadores, turnos).
 
 - **Stack:** Svelte + Vite + TypeScript + Trystero (WebRTC P2P via trackers públicos)
 - **Flujo:** Crear sala → compartir enlace `#/sala/<id>` → lobby → juego
@@ -22,13 +22,12 @@ Usa [Trystero](https://github.com/dmotz/trystero) (strategy `torrent`) que se co
 
 Alternativa: cambiar `src/lib/net/trysteroAdapter.ts` por PeerJS si prefieres.
 
-## Crear tu propio juego
+## Desarrollar el juego
 
-Este repo es una plantilla: cada juego vive en su propio repositorio.
-Sigue [`docs/NUEVO-REPO.md`](docs/NUEVO-REPO.md) para derivar un repo
-(`Use this template`), renombrarlo y sustituir la demo (trivia) por tu juego.
-El contrato `GameModule`, las reglas del reducer y los tests están en
-[`docs/NUEVO-JUEGO.md`](docs/NUEVO-JUEGO.md).
+Este repo es el juego en sí (derivado de la plantilla fiesta P2P, no una
+plantilla). La demo actual es la trivia en `src/lib/game/trivia/`:
+sustitúyela por el juego final siguiendo [`docs/NUEVO-JUEGO.md`](docs/NUEVO-JUEGO.md)
+(contrato `GameModule`, reglas del reducer y tests).
 
 ## Pruebas
 
@@ -47,7 +46,7 @@ La prueba P2P se salta si no logra alcanzar los trackers, salvo cuando `E2E_P2P=
 
 - El workflow `.github/workflows/pages.yml` hace build y deploy automático al pushear a `main`.
 - Configura `Settings → Pages → Source: GitHub Actions`.
-- `vite.config.ts` usa `VITE_BASE=/wg_template/` — cambia al nombre de tu repo.
+- `vite.config.ts` usa `VITE_BASE=/wg_baldomero/` (coincide con este repo).
 
 ## Estructura
 
@@ -65,4 +64,4 @@ src/components/   # PlayerList, ShareLink, NameInput
 - Host autoritativo, mensajes JSON pequeños
 - Sin persistencia (recargar pierde sala)
 
-Licencia MIT — usa este repo como plantilla (Use this template) y modifica libremente.
+Licencia MIT — modifícalo libremente.
