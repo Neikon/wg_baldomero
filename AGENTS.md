@@ -56,7 +56,7 @@ npm run test:e2e  # Playwright; E2E_P2P=1 makes the tracker case mandatory
 1. Review the local diff and `git log` before changing anything.
 2. Re-run `check/test/build/test:e2e` if code changed.
 3. Commit and push to `main` as you complete each change — don't accumulate uncommitted work.
-3. Next: Baldomero game complete (plan: `docs/superpowers/plans/2026-09-20-baldomero-implementation.md`); new games per `docs/NUEVO-JUEGO.md`.
+4. Merge gate: before merging anything into `main`, `check` + `test` + `build` + `test:e2e` must ALL be green. e2e is NOT in CI — run it locally (`npx playwright install --with-deps chromium` once; `E2E_P2P=1 npm run test:e2e` for the mandatory real-P2P case).
 
 <mcp_instructions>
   <server name="codebase-memory-mcp">
