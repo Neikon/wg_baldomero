@@ -72,3 +72,55 @@ describe('baldomero pistas', () => {
     expect(s.phase).toBe('votacion')
   })
 })
+describe('baldomero votacion', () => {
+  function enVotacion(): BaldomeroState {
+    let s = reducer(createInitialState(peers4), { t:'startGame' }, ctxHost)
+    for (const pid of ['h1','p2','p3','p4']) {
+      s = reducer(s, { t:'darPista', palabra:'w' }, { isHost: pid==='h1', peerId: pid })
+    }
+    return s
+  }
+  function vecinoDe(s: BaldomeroState): string {
+    return s.jugadores.find(id => id !== s.baldomeroId)!
+  }
+  it('rechaza autovoto, voto a no jugador y voto doble', () => {
+    const s = enVotacion()
+    expect(reducer(s, { t:'votar', objetivo:'p3' }, { isHost:false, peerId:'p3' })).toBe(s)
+    expect(reducer(s, { t:'votar', objetivo:'nadie' }, { isHost:false, peerId:'p2' })).toBe(s)
+    const uno = reducer(s, { t:'votar', objetivo:'p3' }, { isHost:false, peerId:'p2' })
+    expect(reducer(uno, { t:'votar', objetivo:'p4' }, { isHost:false, peerId:'p2' })).toBe(uno)
+  })
+  it('si Baldomero no es el más votado gana al instante', () => {
+    let s = enVotacion()
+    const v = vecinoDe(s)
+    const otro = s.jugadores.find(id => id !== v)!
+    for (const pid of s.jugadores) {
+      const objetivo = pid === v ? otro : v // el objetivo vota a otro (el autovoto está prohibido)
+      s = reducer(s, { t:'votar', objetivo }, { isHost: pid==='h1', peerId: pid })
+    }
+    expect(s.phase).toBe('final')
+    expect(s.ganador).toBe('baldomero')
+    expect(s.marcador[s.baldomeroId]).toBe(1)
+  })
+  it('si lo descubren hay adivinanza con 1 intento (2 con 3 jugadores)', () => {
+    let s = enVotacion()
+    const w = s.jugadores.find(id => id !== s.baldomeroId)!
+    for (const pid of s.jugadores) {
+      const objetivo = pid === s.baldomeroId ? w : s.baldomeroId // Baldomero no puede votarse a sí mismo
+      s = reducer(s, { t:'votar', objetivo }, { isHost: pid==='h1', peerId: pid })
+    }
+    expect(s.phase).toBe('adivinanza')
+    expect(s.descubiertos).toEqual([s.baldomeroId])
+    expect(s.intentos).toBe(1)
+    expect(s.aCiegas).toBe(false)
+    let t = reducer(createInitialState([{id:'h1'},{id:'p2'},{id:'p3'}]), { t:'startGame' }, ctxHost)
+    for (const pid of ['h1','p2'] as const) t = reducer(t, { t:'darPista', palabra:'w' }, { isHost: pid==='h1', peerId: pid })
+    t = reducer(t, { t:'darPista', palabra:'w' }, { isHost:false, peerId:'p3' })
+    for (const pid of ['h1','p2','p3'] as const) {
+      const objetivo = pid === t.baldomeroId ? (['h1','p2','p3'] as const).find(id => id !== t.baldomeroId)! : t.baldomeroId
+      t = reducer(t, { t:'votar', objetivo }, { isHost: pid==='h1', peerId: pid })
+    }
+    expect(t.phase).toBe('adivinanza')
+    expect(t.intentos).toBe(2)
+  })
+})

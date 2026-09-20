@@ -74,5 +74,30 @@ export function reducer(state: BaldomeroState, action: BaldomeroAction, ctx: { i
     }
     return next
   }
+  if (action.t === 'votar') {
+    if (state.phase !== 'votacion') return state
+    if (!state.jugadores.includes(ctx.peerId)) return state
+    if (state.votos[ctx.peerId] !== undefined) return state
+    const objetivo = action.objetivo
+    if (objetivo === ctx.peerId || !state.jugadores.includes(objetivo)) return state
+    const votos = { ...state.votos, [ctx.peerId]: objetivo }
+    const next: BaldomeroState = { ...state, votos, version: state.version + 1 }
+    if (!state.jugadores.every(id => votos[id] !== undefined)) return next
+    const cuenta: Record<string, number> = {}
+    for (const v of Object.values(votos)) cuenta[v] = (cuenta[v] ?? 0) + 1
+    const max = Math.max(...Object.values(cuenta))
+    const descubiertos = Object.keys(cuenta).filter(id => cuenta[id] === max)
+    if (!descubiertos.includes(state.baldomeroId)) {
+      const marcador = { ...state.marcador }
+      marcador[state.baldomeroId] = (marcador[state.baldomeroId] ?? 0) + 1
+      return { ...next, phase: 'final', descubiertos, ganador: 'baldomero', marcador, version: next.version + 1 }
+    }
+    return {
+      ...next, phase: 'adivinanza', descubiertos,
+      intentos: state.jugadores.length === MIN_JUGADORES ? 2 : 1,
+      aCiegas: state.jugadores.length >= 7,
+      version: next.version + 1
+    }
+  }
   return state
 }
