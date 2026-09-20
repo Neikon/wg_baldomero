@@ -139,6 +139,11 @@
       </div>
       <p>{nPistas}/{jugadores.length} han dado su pista</p>
     {/if}
+    {#if esAnfitrion}
+      <div style="display:flex;gap:0.5rem;margin-top:0.6rem;flex-wrap:wrap">
+        <button on:click={() => onAction({ t:'reiniciar' })} style="background:var(--muted)">Cancelar ronda</button>
+      </div>
+    {/if}
   {:else if state.phase === 'votacion'}
     <!-- ============ VOTACIÓN ============ -->
     {#if juego && !soyBaldomero}
@@ -154,12 +159,17 @@
         <li style="display:flex;justify-content:space-between;align-items:center;gap:0.6rem;background:var(--card);padding:0.5rem 0.8rem;border-radius:8px">
           <span>{nombre(pid)}: «{pistas[pid] ?? '…'}»</span>
           {#if juego}
-            <button on:click={() => votar(pid)} disabled={yaVoto} style="padding:0.3rem 0.7rem;font-size:0.85rem">Votar</button>
+            <button on:click={() => votar(pid)} disabled={yaVoto || pid === selfId} style="padding:0.3rem 0.7rem;font-size:0.85rem">Votar</button>
           {/if}
         </li>
       {/each}
     </ul>
     <p>{nVotos}/{jugadores.length} han votado</p>
+    {#if esAnfitrion}
+      <div style="display:flex;gap:0.5rem;margin-top:0.6rem;flex-wrap:wrap">
+        <button on:click={() => onAction({ t:'reiniciar' })} style="background:var(--muted)">Cancelar ronda</button>
+      </div>
+    {/if}
   {:else if state.phase === 'adivinanza'}
     <!-- ============ ADIVINANZA ============ -->
     {#if juego && soyBaldomero}
@@ -179,6 +189,11 @@
       {#if descubiertos.length === 0}
         <p>Baldomero está pensando el chisme…{#if state.aCiegas} sin mirar la tarjeta.{/if}</p>
       {/if}
+    {/if}
+    {#if esAnfitrion}
+      <div style="display:flex;gap:0.5rem;margin-top:0.6rem;flex-wrap:wrap">
+        <button on:click={() => onAction({ t:'reiniciar' })} style="background:var(--muted)">Cancelar ronda</button>
+      </div>
     {/if}
   {:else if state.phase === 'final'}
     <!-- ============ FINAL ============ -->

@@ -1,6 +1,6 @@
 # wg_baldomero — Juego de fiesta P2P
 
-Juego de fiesta multijugador en navegador. **Sin servidor ni base de datos**, 100% estático en GitHub Pages (1–20 jugadores, turnos).
+Juego de fiesta multijugador en navegador. **Sin servidor ni base de datos**, 100% estático en GitHub Pages. Salas de hasta 20 · partidas de 3–8 · Sin registro.
 
 - **Stack:** Svelte + Vite + TypeScript + Trystero (WebRTC P2P via trackers públicos)
 - **Flujo:** Crear sala → compartir enlace `#/sala/<id>` → lobby → juego
