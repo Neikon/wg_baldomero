@@ -26,7 +26,7 @@ P2P via Trystero (`torrent`, public trackers, no accounts). Logical host-authori
 - `src/lib/utils/{id,names}.ts` — `generateSalaId` (6 chars), `assignName` (`Jugador N`), `sanitizeName`
 - `vite.config.ts` — `base=VITE_BASE || '/wg_baldomero/'`, `host:true, strictPort:true` (devcontainer)
 - `.devcontainer/` (`typescript-node:22`; post-create apt-installs `gh`, runs `npm ci`), ports 5173/4173
-- `.github/workflows/pages.yml` — build (`VITE_BASE=/wg_baldomero/`) + `deploy-pages@v4`
+- `.github/workflows/pages.yml` — `test` (`check` + vitest, gates build) then build (`VITE_BASE=/wg_baldomero/`) + `deploy-pages@v4`
 - `tests/unit/` (41) + `tests/e2e/` (11, incl. real P2P rooms 5/10/15/20, burst, half-slow; 3 of the 6 public trackers are dead, redundancy absorbs it)
 
 ## Commands (Node 22)
