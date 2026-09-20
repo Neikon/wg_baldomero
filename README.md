@@ -4,7 +4,7 @@ Juego de fiesta multijugador en navegador. **Sin servidor ni base de datos**, 10
 
 - **Stack:** Svelte + Vite + TypeScript + Trystero (WebRTC P2P via trackers públicos)
 - **Flujo:** Crear sala → compartir enlace `#/sala/<id>` → lobby → juego
-- **Demo incluida:** trivia configurable (punto de partida a reemplazar)
+- **Juego incluido:** Baldomero (engaño y deducción: pistas, votación y adivinanza)
 - **Host migration:** Si el anfitrión se va, el siguiente jugador toma el control sin perder estado
 
 ## Uso rápido
@@ -25,8 +25,8 @@ Alternativa: cambiar `src/lib/net/trysteroAdapter.ts` por PeerJS si prefieres.
 ## Desarrollar el juego
 
 Este repo es el juego en sí (derivado de la plantilla fiesta P2P, no una
-plantilla). La demo actual es la trivia en `src/lib/game/trivia/`:
-sustitúyela por el juego final siguiendo [`docs/NUEVO-JUEGO.md`](docs/NUEVO-JUEGO.md)
+plantilla). El juego actual es Baldomero en `src/lib/game/baldomero/`:
+para crear otro juego sigue [`docs/NUEVO-JUEGO.md`](docs/NUEVO-JUEGO.md)
 (contrato `GameModule`, reglas del reducer y tests).
 
 ## Pruebas
@@ -53,7 +53,7 @@ La prueba P2P se salta si no logra alcanzar los trackers, salvo cuando `E2E_P2P=
 ```
 src/lib/net/      # P2P (Trystero adapter, helpers)
 src/lib/stores/   # roomStore, gameStore
-src/lib/game/     # contrato + registry + trivia (demo a reemplazar)
+src/lib/game/     # contrato + registry + baldomero (juego)
 src/routes/       # Landing, Room, Game
 src/components/   # PlayerList, ShareLink, NameInput
 ```

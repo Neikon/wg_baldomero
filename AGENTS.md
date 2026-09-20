@@ -5,7 +5,7 @@
 ## What it is
 
 Browser multiplayer party game, 100% static (GitHub Pages), no backend or database.
-Flow: create room → share `#/sala/<id>` link → lobby (1–20 players) → turn-based trivia demo (placeholder for the final game).
+Flow: create room → share `#/sala/<id>` link → lobby (1–20 players) → Baldomero game (deception and deduction).
 P2P via Trystero (`torrent`, public trackers, no accounts). Logical host-authoritative with host migration. UI in Spanish.
 
 ## Architecture docs
@@ -22,7 +22,7 @@ P2P via Trystero (`torrent`, public trackers, no accounts). Logical host-authori
 - `src/lib/net/` — `types.ts` (`Msg`); `trysteroAdapter.ts` (`appId='wg_baldomero_v1_'+salaId`, `relayStatus()`); `transport.ts` (4 verified trackers, 5 STUN, e2e-only `?tracker=` override); `turn.ts` (optional TURN for mobile symmetric NAT); `debug.ts` (exportable log: copy/download); `iceCheck.ts` ("Probar mi red": P2P_OK/SOLO_TURN/NO_P2P verdict); adapter takes `?lagMs=&lossPct=` (e2e-only simulated slow mobile)
 - `scripts/patch-trystero.js` (postinstall) — fixes the trystero 0.20.1 offer-pool leak (ghost rooms within minutes without it)
 - `src/lib/stores/{roomStore,gameStore}.ts` — room/peers/joinOrder/isHost; `gameStore` applies `stateSync` only if newer version
-- `src/lib/game/{types,registry}.ts` — `GameModule` contract, registry by `juegoId`; `trivia/` is the demo to replace (configurable count/seconds/category; guide: `docs/NUEVO-JUEGO.md`)
+- `src/lib/game/{types,registry}.ts` — `GameModule` contract, registry by `juegoId`; `baldomero/` is the game (clue/vote/guess rounds over mailbox cards; guide: `docs/NUEVO-JUEGO.md`)
 - `src/lib/utils/{id,names}.ts` — `generateSalaId` (6 chars), `assignName` (`Jugador N`), `sanitizeName`
 - `vite.config.ts` — `base=VITE_BASE || '/wg_baldomero/'`, `host:true, strictPort:true` (devcontainer)
 - `.devcontainer/` (`typescript-node:22`; post-create apt-installs `gh`, runs `npm ci`), ports 5173/4173
@@ -55,7 +55,7 @@ npm run test:e2e  # Playwright; E2E_P2P=1 makes the tracker case mandatory
 
 1. Review the local diff and `git log` before changing anything.
 2. Re-run `check/test/build/test:e2e` if code changed.
-3. Next: build the Baldomero game per `docs/superpowers/plans/2026-09-20-baldomero-implementation.md` (game rules: `docs/NUEVO-JUEGO.md`).
+3. Next: Baldomero game complete (plan: `docs/superpowers/plans/2026-09-20-baldomero-implementation.md`); new games per `docs/NUEVO-JUEGO.md`.
 
 <mcp_instructions>
   <server name="codebase-memory-mcp">

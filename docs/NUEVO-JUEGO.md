@@ -3,8 +3,8 @@
 Un juego de `wg_baldomero` es un estado serializable, un reducer puro y un componente
 Svelte. La sala, el lobby y la red P2P no necesitan conocer sus reglas.
 
-El ejemplo de referencia es [`src/lib/game/trivia/`](../src/lib/game/trivia/):
-configuración de partida, temporizador y varias fases. Cópialo y simplifica.
+El ejemplo de referencia es [`src/lib/game/baldomero/`](../src/lib/game/baldomero/):
+pistas, votación, adivinanza y marcador por rondas. Cópialo y simplifica.
 
 ## 1. Crea estado, acciones y reducer
 
@@ -93,8 +93,8 @@ prop `onAction`:
 {/if}
 ```
 
-Sustituye la entrada de la demo en `src/lib/game/registry.ts` por la tuya (`id`,
-nombre, las dos funciones y el componente); borra `src/lib/game/trivia/` o
+Sustituye la entrada de Baldomero en `src/lib/game/registry.ts` por la tuya (`id`,
+nombre, las dos funciones y el componente); borra `src/lib/game/baldomero/` o
 consérvala fuera del registry como referencia. No cambies `Room.svelte`,
 `Game.svelte` ni `src/lib/net/`:
 

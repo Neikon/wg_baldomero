@@ -24,7 +24,7 @@
       {#if error}<span style="color:var(--error);font-size:0.9rem">{error}</span>{/if}
       <button on:click={crear} disabled={!!error || !sanitizeName(name)}>Crear sala</button>
     </div>
-    <p class="muted" style="font-size:0.85rem">1–20 jugadores · Trivia por turnos · Sin registro</p>
+    <p class="muted" style="font-size:0.85rem">3–8 jugadores · Engaño y deducción · Sin registro</p>
   </div>
   <div style="margin-top:1rem" class="muted">
     <small>Svelte + Trystero (P2P). El enlace contiene el id de la sala.</small>
