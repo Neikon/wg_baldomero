@@ -14,27 +14,14 @@ test('landing renderiza y crear sala lleva al lobby', async ({ page }) => {
   expect(errors).toEqual([])
 })
 
-test('al empezar el juego se ocultan los elementos del lobby', async ({ page }) => {
+test('el anfitrión no puede empezar sin 3 vecinos', async ({ page }) => {
   await page.goto('#/')
   await page.getByRole('button', { name: /Crear sala/ }).click()
   await expect(page).toHaveURL(/#\/sala\/[A-Za-z0-9]{6}/)
 
-  // lobby: enlace para compartir y lista de jugadores visibles
-  await expect(page.getByRole('button', { name: /Copiar enlace/ })).toBeVisible()
-  await expect(page.getByRole('heading', { name: /Jugadores/ })).toBeVisible()
-
-  // el QR se genera al pedirlo
-  await page.getByRole('button', { name: /Ver QR/ }).click()
-  await expect(page.getByAltText(/QR para unirse/)).toBeVisible()
-
-  // el anfitrión empieza la partida
-  await page.getByRole('button', { name: /Empezar trivia/ }).click()
-
-  // juego: pregunta visible a pantalla completa, sin elementos de lobby
-  await expect(page.getByText(/Pregunta 1\/10/)).toBeVisible()
-  await expect(page.getByRole('button', { name: /Copiar enlace/ })).toBeHidden()
-  await expect(page.getByRole('heading', { name: /Jugadores/ })).toBeHidden()
-  await expect(page.getByRole('heading', { name: /Cambiar nombre/ })).toBeHidden()
+  await expect(page.getByLabel('Tarjeta de buzones')).toBeVisible()
+  await expect(page.getByRole('button', { name: /Empezar partida/ })).toBeDisabled()
+  await expect(page.getByText(/Necesitas entre 3 y 8 vecinos/)).toBeVisible()
 })
 
 test('crear una segunda sala muestra datos limpios de la nueva', async ({ page }) => {
@@ -57,20 +44,8 @@ test('crear una segunda sala muestra datos limpios de la nueva', async ({ page }
   await expect(page.getByText('1/20 jugadores')).toBeVisible()
 })
 
-test('configura y termina una trivia de dos preguntas', async ({ page }) => {
+test('el lobby muestra la tarjeta y el botón de empezar', async ({ page }) => {
   await page.goto('#/sala/corta1?host=1&name=Ana')
-
-  await page.getByLabel('Número de preguntas').fill('2')
-  await page.getByLabel('Segundos por pregunta').fill('5')
-  await page.getByRole('button', { name: /Empezar trivia \(2 preguntas\)/ }).click()
-
-  await expect(page.getByText('Pregunta 1/2')).toBeVisible()
-  await page.getByRole('button', { name: /B\. Madrid/ }).click()
-  await expect(page.getByRole('heading', { name: 'Resultados' })).toBeVisible()
-  await page.getByRole('button', { name: 'Siguiente' }).click()
-
-  await expect(page.getByText('Pregunta 2/2')).toBeVisible()
-  await page.getByRole('button', { name: /B\. 6/ }).click()
-  await page.getByRole('button', { name: 'Siguiente' }).click()
-  await expect(page.getByRole('heading', { name: /Clasificación final/ })).toBeVisible()
+  await expect(page.getByLabel('Tarjeta de buzones')).toBeVisible()
+  await expect(page.getByRole('button', { name: /Empezar partida/ }).first()).toBeVisible()
 })
