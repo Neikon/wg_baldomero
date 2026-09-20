@@ -61,5 +61,18 @@ export function reducer(state: BaldomeroState, action: BaldomeroAction, ctx: { i
     if (Number.isInteger(cfg) && (cfg as number) >= 0 && (cfg as number) < BUZONES.length) tarjeta = cfg as number
     return empezarRonda(state, tarjeta)
   }
+  if (action.t === 'darPista') {
+    if (state.phase !== 'pistas') return state
+    if (!state.jugadores.includes(ctx.peerId)) return state
+    if (state.pistas[ctx.peerId] !== undefined) return state
+    const palabra = (action.palabra ?? '').trim().slice(0, 30)
+    if (!palabra) return state
+    const pistas = { ...state.pistas, [ctx.peerId]: palabra }
+    const next: BaldomeroState = { ...state, pistas, version: state.version + 1 }
+    if (state.jugadores.every(id => pistas[id] !== undefined)) {
+      return { ...next, phase: 'votacion', version: next.version + 1 }
+    }
+    return next
+  }
   return state
 }

@@ -43,3 +43,32 @@ describe('baldomero lobby/start', () => {
     expect(n.marcador.p5).toBe(0)
   })
 })
+describe('baldomero pistas', () => {
+  function ronda4(): BaldomeroState {
+    return reducer(createInitialState(peers4), { t:'startGame' }, ctxHost)
+  }
+  it('rechaza pistas vacías, duplicadas y de no jugadores', () => {
+    const s = ronda4()
+    expect(reducer(s, { t:'darPista', palabra:'   ' }, { isHost:false, peerId:'p2' })).toBe(s)
+    const una = reducer(s, { t:'darPista', palabra:'  cuchara ' }, { isHost:false, peerId:'p2' })
+    expect(una.pistas.p2).toBe('cuchara')
+    expect(reducer(una, { t:'darPista', palabra:'otra' }, { isHost:false, peerId:'p2' })).toBe(una)
+    expect(reducer(s, { t:'darPista', palabra:'x' }, { isHost:false, peerId:'nadie' })).toBe(s)
+  })
+  it('avanza a votacion cuando todos dan su pista', () => {
+    let s = ronda4()
+    for (const pid of ['h1','p2','p3','p4']) {
+      s = reducer(s, { t:'darPista', palabra:'w-'+pid }, { isHost: pid==='h1', peerId: pid })
+    }
+    expect(s.phase).toBe('votacion')
+  })
+  it('un playerJoined a mitad de ronda no bloquea el avance (espectador)', () => {
+    let s = ronda4()
+    s = reducer(s, { t:'playerJoined', peerId:'p5' }, ctxHost)
+    expect(s.jugadores).toEqual(['h1','p2','p3','p4'])
+    for (const pid of ['h1','p2','p3','p4']) {
+      s = reducer(s, { t:'darPista', palabra:'w' }, { isHost: pid==='h1', peerId: pid })
+    }
+    expect(s.phase).toBe('votacion')
+  })
+})
