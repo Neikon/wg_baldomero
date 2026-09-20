@@ -23,7 +23,7 @@ P2P via Trystero (`torrent`, public trackers, no accounts). Logical host-authori
 - `scripts/patch-trystero.js` (postinstall) — fixes the trystero 0.20.1 offer-pool leak (ghost rooms within minutes without it)
 - `src/lib/stores/{roomStore,gameStore}.ts` — room/peers/joinOrder/isHost; `gameStore` applies `stateSync` only if newer version
 - `src/lib/game/{types,registry}.ts` — `GameModule` contract, registry by `juegoId`; `baldomero/` is the game (clue/vote/guess rounds over mailbox cards; guide: `docs/NUEVO-JUEGO.md`)
-- `src/lib/utils/{id,names}.ts` — `generateSalaId` (6 chars), `assignName` (`Jugador N`), `sanitizeName`
+- `src/lib/utils/{id,names}.ts` — `generateSalaId` (6 chars), `randomName` (Animal+Adjetivo únicos), `sanitizeName`
 - `vite.config.ts` — `base=VITE_BASE || '/wg_baldomero/'`, `host:true, strictPort:true` (devcontainer)
 - `.devcontainer/` (`typescript-node:22`; post-create apt-installs `gh`, runs `npm ci`), ports 5173/4173
 - `.github/workflows/pages.yml` — `test` (`check` + vitest, gates build) then build (`VITE_BASE=/wg_baldomero/`) + `deploy-pages@v4`

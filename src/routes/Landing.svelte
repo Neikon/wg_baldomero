@@ -1,7 +1,7 @@
 <script lang="ts">
   import { generateSalaId } from '../lib/utils/id'
-  import { assignName, sanitizeName } from '../lib/utils/names'
-  let name = assignName(1)
+  import { randomName, sanitizeName } from '../lib/utils/names'
+  let name = randomName()
   let error=''
   function crear(){
     const s = sanitizeName(name)

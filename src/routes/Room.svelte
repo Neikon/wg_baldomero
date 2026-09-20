@@ -2,7 +2,7 @@
   import { onMount, onDestroy } from 'svelte'
   import { roomStore, initRoom } from '../lib/stores/roomStore'
   import { gameStore } from '../lib/stores/gameStore'
-  import { assignName, sanitizeName } from '../lib/utils/names'
+  import { randomName, sanitizeName } from '../lib/utils/names'
   import { electNewHost, isRoomFull } from '../lib/net/room'
   import { joinTrystero, relayStatus } from '../lib/net/trysteroAdapter'
   import { readTurnServers, refreshTurnServers, turnApiUrl, guardarTurnApi, type TurnServer } from '../lib/net/turn'
@@ -182,7 +182,7 @@
 
     // iniciar room
     if (isHostParam) {
-      if (!nameToUse) nameToUse = assignName(1)
+      if (!nameToUse) nameToUse = randomName()
       initRoom(freshSalaId, nameToUse, true)
       // init game
       const initPeers = [{id: selfId, name: nameToUse}] as any
@@ -192,10 +192,9 @@
         : { phase: 'lobby', version: 0, gameId: juegoId }
       gameStore.set(initState); gameState = initState
     } else {
-      // guest: asignaremos nombre tras conectar, provisional
+      // guest: nombre aleatorio evitando los peers ya visibles
       if (!nameToUse) {
-        // se asignará al recibir peers, por ahora Jugador ?
-        nameToUse = assignName(2)
+        nameToUse = randomName(peers.map((p: any) => p.name))
       }
       initRoom(freshSalaId, nameToUse, false)
     }
